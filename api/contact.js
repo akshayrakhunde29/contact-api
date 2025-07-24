@@ -7,9 +7,9 @@ app.use(express.json());
 const PORT = process.env.PORT || 8080;
 
 // GET API
-// app.get("/contact", (req, res) => {
-//   res.send("Contact API is working");
-// });
+app.get("/", (req, res) => {
+  res.send("Contact API is working");
+});
 
 // POST API
 app.post("/contact", async (req, res) => {
