@@ -4,15 +4,18 @@ const nodemailer = require("nodemailer");
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT || 8080;
-
-// GET API
+// GET API - Root endpoint
 app.get("/", (req, res) => {
   res.send("Contact API is working");
 });
 
-// POST API
-app.post("/contact", async (req, res) => {
+// GET API - Health check for /api/contact
+app.get("/api/contact", (req, res) => {
+  res.json({ message: "Contact API endpoint is ready" });
+});
+
+// POST API - Contact form submission
+app.post("/api/contact", async (req, res) => {
   const { name, email, mobile, message } = req.body;
 
   if (!name || !email || !mobile || !message) {
@@ -20,21 +23,20 @@ app.post("/contact", async (req, res) => {
   }
 
   // Nodemailer config
-  let transporter = nodemailer.createTransport({
+  let transporter = nodemailer.createTransporter({
     service: "gmail",
     auth: {
-      user: "rakhundeakshay29@gmail.com",
-      pass: "gnne hcxf vlsb dghe", // Use an App Password if 2FA is enabled
+      user: process.env.GMAIL_USER || "rakhundeakshay29@gmail.com",
+      pass: process.env.GMAIL_PASS || "gnne hcxf vlsb dghe", // Better to use env variables
     },
   });
 
   try {
     await transporter.sendMail({
-      from: "<rakhundeakshay29@gmail.com>",
+      from: `<${process.env.GMAIL_USER || "rakhundeakshay29@gmail.com"}>`,
       to: email,
       subject: "Thank you for reaching out to Akshay",
-      text: `Dear ${name}, \n\nYour message has been received to Akshay. He will get back to you soon \n\nDetails you shared: \nName - ${name} \nMobile - ${mobile} \nEmail - ${email} \nMessage - ${message} \n\nThanks again, \nAkshay.
-      `,
+      text: `Dear ${name}, \n\nYour message has been received to Akshay. He will get back to you soon \n\nDetails you shared: \nName - ${name} \nMobile - ${mobile} \nEmail - ${email} \nMessage - ${message} \n\nThanks again, \nAkshay.`,
     });
 
     res.status(200).json({ success: "Message sent successfully." });
@@ -44,6 +46,10 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Handle all other routes
+app.all("*", (req, res) => {
+  res.status(404).json({ error: "Route not found" });
 });
+
+// Export the Express app as a serverless function
+module.exports = app;
