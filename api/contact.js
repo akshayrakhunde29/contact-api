@@ -23,17 +23,17 @@ app.post("/api/contact", async (req, res) => {
   }
 
   // Nodemailer config
-  let transporter = nodemailer.createTransporter({
+  let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.GMAIL_USER || "rakhundeakshay29@gmail.com",
-      pass: process.env.GMAIL_PASS || "gnne hcxf vlsb dghe", // Better to use env variables
+      user: "rakhundeakshay29@gmail.com",
+      pass: "gnne hcxf vlsb dghe", // Better to use env variables
     },
   });
 
   try {
     await transporter.sendMail({
-      from: `<${process.env.GMAIL_USER || "rakhundeakshay29@gmail.com"}>`,
+      from: "<rakhundeakshay29@gmail.com>",
       to: email,
       subject: "Thank you for reaching out to Akshay",
       text: `Dear ${name}, \n\nYour message has been received to Akshay. He will get back to you soon \n\nDetails you shared: \nName - ${name} \nMobile - ${mobile} \nEmail - ${email} \nMessage - ${message} \n\nThanks again, \nAkshay.`,
