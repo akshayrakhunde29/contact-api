@@ -8,10 +8,16 @@
     "build": "echo 'No build step required'",
     "start": "node server.js"
   },
-  "keywords": ["contact", "api", "nodemailer", "vercel"],
+  "keywords": [
+    "contact",
+    "api",
+    "nodemailer",
+    "vercel"
+  ],
   "author": "akshay rakhunde",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "nodemailer": "^6.9.7"
   },
